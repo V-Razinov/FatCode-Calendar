@@ -1,35 +1,29 @@
-package com.mediasoft.fatcode_calendar
+package com.mediasoft.fatcode_calendar.presentation
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.view.updatePadding
+import com.mediasoft.fatcode_calendar.other.toDp
+import kotlin.math.absoluteValue
 
 class MonthDaysView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : TableLayout(context, attrs) {
 
-    private val weeksCount = 5
     private var month: Month? = null
     private val weekDayNamesRow: TableRow
-    private val weeksRows: List<TableRow>
 
     init {
         isStretchAllColumns = true
         weekDayNamesRow = createWeekDayNamesView()
         addView(weekDayNamesRow)
-        weeksRows = mutableListOf<TableRow>().apply {
-            repeat(weeksCount) {
-                val view = createWeekView()
-                addView(view)
-                add(view)
-            }
-        }
     }
 
     fun setMonth(month: Month?) {
@@ -42,28 +36,33 @@ class MonthDaysView @JvmOverloads constructor(
 
     private fun fillDays() {
         val month = month ?: return
-        weeksRows.forEachIndexed rowEach@{ rowIndex, row ->
-            val week = month.weeks.getOrNull(rowIndex)
+        val childCount = childCount - 1
+        val newSize = month.weeks.size + 1
 
-            row.children.forEachIndexed dayEach@{ index, day ->
-                if (day !is TextView) return@dayEach
+        val diff = (childCount - newSize).absoluteValue
+        if (childCount > newSize)
+            removeViews(childCount - diff, diff)
+        else if (childCount < newSize)
+            repeat(diff) { addView(createWeekView()) }
 
-                day.text = week?.days
-                    ?.getOrNull(index)
-                    ?.day
-                    ?.takeIf { it >= 0 }
-                    ?.toString()
-            }
+        repeat(newSize) { index ->
+            val week = month.weeks.getOrNull(index)
+            (getChildAt(index + 1) as ViewGroup)
+                .children
+                .forEachIndexed dayEach@{ dayIndex, day ->
+                    if (day !is TextView) return@dayEach
+
+                    day.text = week?.days
+                        ?.getOrNull(dayIndex)
+                        ?.day
+                        ?.takeIf { it > 0 }
+                        ?.toString()
+                }
         }
     }
 
     private fun clear() {
-        weeksRows.forEach rowEach@{ row ->
-            row.children.forEach dayEach@{ day ->
-                if (day !is TextView) return@dayEach
-                day.text = null
-            }
-        }
+        removeViews(1, childCount)
     }
 
     private fun createWeekDayNamesView() = TableRow(context).apply {

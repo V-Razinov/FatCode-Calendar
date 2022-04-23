@@ -1,4 +1,4 @@
-package com.mediasoft.fatcode_calendar
+package com.mediasoft.fatcode_calendar.other
 
 import android.content.Context
 import android.util.TypedValue

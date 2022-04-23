@@ -1,4 +1,4 @@
-package com.mediasoft.fatcode_calendar
+package com.mediasoft.fatcode_calendar.presentation
 
 import java.util.*
 
