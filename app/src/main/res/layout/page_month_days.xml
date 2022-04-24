@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.mediasoft.fatcode_calendar.presentation.MonthDaysView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.mediasoft.fatcode_calendar.other.custom.MonthDaysView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="16dp"/>
