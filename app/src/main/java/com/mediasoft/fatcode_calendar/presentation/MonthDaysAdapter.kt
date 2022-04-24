@@ -48,8 +48,10 @@ class MonthDaysViewHolder(
     private val binding: PageMonthDaysBinding,
     private val onDayClick: (month: Month, day: Day) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    val selectionObserver = CalendarSelection.Observer { startMonth, startDay, endMonth, endDay ->
-        binding.root.select(startMonth, startDay, endMonth, endDay)
+    val selectionObserver = object : CalendarSelection.Observer {
+        override fun onChanged(startMonth: Month?, startDay: Day?, endMonth: Month?, endDay: Day?) {
+            binding.root.select(startMonth, startDay, endMonth, endDay)
+        }
     }
 
     fun bind(month: Month) {

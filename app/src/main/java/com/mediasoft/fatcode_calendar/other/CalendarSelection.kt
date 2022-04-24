@@ -78,7 +78,7 @@ class CalendarSelection {
         }
     }
 
-    fun interface Observer {
+    interface Observer {
         fun onChanged(
             startMonth: Month?,
             startDay: Day?,
